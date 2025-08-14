@@ -37,7 +37,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                         <i class="fas fa-user-circle"></i> <?= $_SESSION['username'] ?>
                     </button>
                     <div class="dropdown-content">
-                        <a href="dashboard.php">Dashboard</a>
+                        <a href="profile.php">Profile</a>
                         <a href="logout.php">Logout</a>
                     </div>
                 </div>
