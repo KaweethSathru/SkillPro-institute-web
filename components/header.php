@@ -17,7 +17,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
     
     <nav class="navbar">
         <a href="index.php" class="logo">
-            <img src="images/logo.png" alt="SkillPro Institute">
+            <img src="../assets/images/logo.png" alt="SkillPro Institute">
             <span>SkillPro Institute</span>
         </a>
         
@@ -26,7 +26,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
             <li><a href="courses.php">Courses</a></li>
             <li><a href="instructors.php">Instructors</a></li>
             <li><a href="events.php">Events</a></li>
-            <li><a href="branches.php">Branches</a></li>
+            <li><a href="about.php">About</a></li>
             <li><a href="contact.php">Contact</a></li>
         </ul>
         

@@ -1,8 +1,25 @@
 <?php include 'header.php'; ?>
+
 <?php
-include '../components/connection.php';
-?>
-<?php
+// Fetch all instructors with their specializations
+$sql = "SELECT id, full_name, specialization FROM instructors";
+$stmt = $conn->prepare($sql);
+$stmt->execute();
+$instructors = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Group instructors by specialization for JavaScript
+$instructors_by_specialization = [];
+foreach ($instructors as $instructor) {
+    $specialization = $instructor['specialization'];
+    if (!isset($instructors_by_specialization[$specialization])) {
+        $instructors_by_specialization[$specialization] = [];
+    }
+    $instructors_by_specialization[$specialization][] = [
+        'id' => $instructor['id'],
+        'name' => $instructor['full_name']
+    ];
+}
+
 // Get course ID from URL
 $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
@@ -32,7 +49,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
     
     // Handle file upload
     if(isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
-        $target_dir = "../images/courses/";
+        $target_dir = "assets/images/courses/";
         $target_file = $target_dir . basename($_FILES["image"]["name"]);
         $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
         
@@ -46,8 +63,8 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
             // Move file to target directory
             if(move_uploaded_file($_FILES["image"]["tmp_name"], $target_path)) {
                 // Delete old image if exists
-                if($image && file_exists("../images/courses/$image")) {
-                    unlink("../images/courses/$image");
+                if($image && file_exists("assets/images/courses/$image")) {
+                    unlink("assets/images/courses/$image");
                 }
                 $image = $filename;
             }
@@ -63,7 +80,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
     
     if($stmt->execute([$name, $category, $description, $duration, $fees, $mode, $branch, $image, $start_date, $id])) {
         $_SESSION['success_message'] = "Course updated successfully!";
-        header("Location: courses.php");
+        echo "<script>window.location.href='courses.php';</script>";
         exit();
     } else {
         $error = "Error updating course. Please try again.";
@@ -89,17 +106,24 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
             
             <div class="form-group">
-                <label for="category">Category *</label>
-                <select id="category" name="category" class="form-control" required>
-                    <option value="ICT" <?= $course['category'] == 'ICT' ? 'selected' : '' ?>>ICT</option>
-                    <option value="Plumbing" <?= $course['category'] == 'Plumbing' ? 'selected' : '' ?>>Plumbing</option>
-                    <option value="Welding" <?= $course['category'] == 'Welding' ? 'selected' : '' ?>>Welding</option>
-                    <option value="Hotel Management" <?= $course['category'] == 'Hotel Management' ? 'selected' : '' ?>>Hotel Management</option>
-                    <option value="Electrical" <?= $course['category'] == 'Electrical' ? 'selected' : '' ?>>Electrical</option>
-                    <option value="Automotive" <?= $course['category'] == 'Automotive' ? 'selected' : '' ?>>Automotive</option>
-                    <option value="Culinary Arts" <?= $course['category'] == 'Culinary Arts' ? 'selected' : '' ?>>Culinary Arts</option>
-                </select>
-            </div>
+        <label for="category">Category *</label>
+        <select id="category" name="category" class="form-control" required onchange="updateInstructors()">
+            <option value="ICT" <?= $course['category'] == 'ICT' ? 'selected' : '' ?>>ICT</option>
+            <option value="Plumbing" <?= $course['category'] == 'Plumbing' ? 'selected' : '' ?>>Plumbing</option>
+            <option value="Welding" <?= $course['category'] == 'Welding' ? 'selected' : '' ?>>Welding</option>
+            <option value="Hotel Management" <?= $course['category'] == 'Hotel Management' ? 'selected' : '' ?>>Hotel Management</option>
+            <option value="Electrical" <?= $course['category'] == 'Electrical' ? 'selected' : '' ?>>Electrical</option>
+            <option value="Automotive" <?= $course['category'] == 'Automotive' ? 'selected' : '' ?>>Automotive</option>
+            <option value="Culinary Arts" <?= $course['category'] == 'Culinary Arts' ? 'selected' : '' ?>>Culinary Arts</option>
+        </select>
+    </div>
+    
+    <div class="form-group">
+        <label for="instructor_id">Instructor *</label>
+        <select id="instructor_id" name="instructor_id" class="form-control" required>
+            <option value="">Loading instructors...</option>
+        </select>
+    </div>
         </div>
         
         <div class="form-group">
@@ -152,7 +176,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <input type="file" id="image" name="image" class="form-control" accept="image/*">
                     <div class="file-preview">
                         <?php if($course['image']): ?>
-                            <img src="../images/courses/<?= $course['image'] ?>" alt="<?= $course['name'] ?>" style="max-width: 200px;">
+                            <img src="assets/images/courses/<?= $course['image'] ?>" alt="<?= $course['name'] ?>" style="max-width: 200px;">
                         <?php endif; ?>
                     </div>
                 </div>
@@ -185,6 +209,46 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
             reader.readAsDataURL(this.files[0]);
         }
     });
+
+    // Pass PHP data to JavaScript
+const instructorsBySpecialization = <?= json_encode($instructors_by_specialization) ?>;
+const currentInstructorId = <?= $course['instructor_id'] ?: 'null' ?>;
+
+function updateInstructors() {
+    const category = document.getElementById('category').value;
+    const instructorSelect = document.getElementById('instructor_id');
+    
+    // Clear existing options
+    instructorSelect.innerHTML = '';
+    
+    if (!category) {
+        instructorSelect.disabled = true;
+        instructorSelect.innerHTML = '<option value="">Select a category first</option>';
+        return;
+    }
+    
+    // Check if we have instructors for this specialization
+    if (instructorsBySpecialization[category] && instructorsBySpecialization[category].length > 0) {
+        instructorSelect.disabled = false;
+        
+        // Add instructors
+        instructorsBySpecialization[category].forEach(instructor => {
+            const option = document.createElement('option');
+            option.value = instructor.id;
+            option.textContent = instructor.name;
+            option.selected = (instructor.id == currentInstructorId);
+            instructorSelect.appendChild(option);
+        });
+    } else {
+        instructorSelect.disabled = true;
+        instructorSelect.innerHTML = `<option value="">No ${category} instructors available</option>`;
+    }
+}
+
+// Initialize instructors dropdown on page load
+document.addEventListener('DOMContentLoaded', function() {
+    updateInstructors();
+});
 </script>
 
 <?php include 'footer.php'; ?>

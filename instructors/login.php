@@ -1,10 +1,10 @@
-<!-- admin/login.php -->
+<!-- instructor/login.php -->
 <?php
 session_start();
 include '../components/connection.php';
 
-// Redirect if already logged in
-if(isset($_SESSION['admin_id'])) {
+// Redirect logged in instructors
+if(isset($_SESSION['instructor_id'])) {
     header('Location: dashboard.php');
     exit();
 }
@@ -12,22 +12,24 @@ if(isset($_SESSION['admin_id'])) {
 $error = '';
 
 if(isset($_POST['submit'])) {
-    $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
+    $username = filter_var($_POST['username'], FILTER_SANITIZE_STRING);
     $password = $_POST['password'];
     
-    $sql = "SELECT * FROM admin WHERE email = ?";
+    $sql = "SELECT * FROM instructors WHERE username = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->execute([$email]);
-    $admin = $stmt->fetch(PDO::FETCH_ASSOC);
+    $stmt->execute([$username]);
+    $instructor = $stmt->fetch(PDO::FETCH_ASSOC);
     
-    if($admin && password_verify($password, $admin['password'])) {
-        $_SESSION['admin_id'] = $admin['id'];
-        $_SESSION['admin_name'] = $admin['full_name'];
-        $_SESSION['admin_email'] = $admin['email'];
+    if($instructor && password_verify($password, $instructor['password'])) {
+        $_SESSION['instructor_id'] = $instructor['id'];
+        $_SESSION['instructor_name'] = $instructor['full_name'];
+        $_SESSION['instructor_username'] = $instructor['username'];
+        $_SESSION['instructor_email'] = $instructor['email'];
+        $_SESSION['instructor_branch'] = $instructor['branch'];
         header('Location: dashboard.php');
         exit();
     } else {
-        $error = "Invalid email or password!";
+        $error = "Invalid username or password!";
     }
 }
 ?>
@@ -37,18 +39,18 @@ if(isset($_POST['submit'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login | SkillPro Institute</title>
+    <title>Instructor Login | SkillPro Institute</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="stylesheet" href="../assets/css/style.css">
     <link rel="stylesheet" href="assets/css/login.css">
 </head>
 <body>
-    <div class="admin-login">
+    <div class="instructor-login">
         <div class="login-form-container">
             <div class="login-form">
                 <div class="login-logo">
                     <img src="../images/logo.png" alt="SkillPro Institute">
-                    <h1>Admin Panel</h1>
+                    <h1>Instructor Portal</h1>
                 </div>
                 
                 <?php if ($error): ?>
@@ -57,13 +59,17 @@ if(isset($_POST['submit'])) {
                 
                 <form action="" method="POST">
                     <div class="form-group">
-                        <label for="email">Email Address</label>
-                        <input type="email" id="email" name="email" class="form-control" required>
+                        <label for="username">Username</label>
+                        <input type="text" id="username" name="username" class="form-control" required>
                     </div>
                     
                     <div class="form-group">
                         <label for="password">Password</label>
                         <input type="password" id="password" name="password" class="form-control" required>
+                    </div>
+                    
+                    <div class="forgot-password">
+                        <a href="forgot_password.php">Forgot your password?</a>
                     </div>
                     
                     <div class="form-group">

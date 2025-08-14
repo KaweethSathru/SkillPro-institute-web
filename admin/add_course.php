@@ -1,7 +1,25 @@
-<?php include 'header.php'; ?>
-<?php
-include '../components/connection.php';
+<?php include 'header.php'; 
+
+// Fetch all instructors with their specializations
+$sql = "SELECT id, full_name, specialization FROM instructors";
+$stmt = $conn->prepare($sql);
+$stmt->execute();
+$instructors = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Group instructors by specialization for JavaScript
+$instructors_by_specialization = [];
+foreach ($instructors as $instructor) {
+    $specialization = $instructor['specialization'];
+    if (!isset($instructors_by_specialization[$specialization])) {
+        $instructors_by_specialization[$specialization] = [];
+    }
+    $instructors_by_specialization[$specialization][] = [
+        'id' => $instructor['id'],
+        'name' => $instructor['full_name']
+    ];
+}
 ?>
+
 <?php
 // Process form submission
 if($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -13,6 +31,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
     $mode = filter_var($_POST['mode'], FILTER_SANITIZE_STRING);
     $branch = filter_var($_POST['branch'], FILTER_SANITIZE_STRING);
     $start_date = filter_var($_POST['start_date'], FILTER_SANITIZE_STRING);
+    $instructor_id = filter_var($_POST['instructor_id'], FILTER_SANITIZE_NUMBER_INT);
     
     // Handle file upload
     $image = '';
@@ -36,11 +55,11 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
     
     // Insert into database
-    $sql = "INSERT INTO courses (name, category, description, duration, fees, mode, branch, image, start_date) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO courses (name, category, description, duration, fees, mode, branch, image, start_date, instructor_id) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
     
-    if($stmt->execute([$name, $category, $description, $duration, $fees, $mode, $branch, $image, $start_date])) {
+    if($stmt->execute([$name, $category, $description, $duration, $fees, $mode, $branch, $image, $start_date, $instructor_id])) {
         $_SESSION['success_message'] = "Course added successfully!";
         echo "<script>window.location.href='courses.php';</script>";
         exit();
@@ -69,7 +88,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
             
             <div class="form-group">
                 <label for="category">Category *</label>
-                <select id="category" name="category" class="form-control" required>
+                <select id="category" name="category" class="form-control" required onchange="updateInstructors()">
                     <option value="">Select Category</option>
                     <option value="ICT">ICT</option>
                     <option value="Plumbing">Plumbing</option>
@@ -78,6 +97,13 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <option value="Electrical">Electrical</option>
                     <option value="Automotive">Automotive</option>
                     <option value="Culinary Arts">Culinary Arts</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="instructor_id">Instructor *</label>
+                <select id="instructor_id" name="instructor_id" class="form-control" required disabled>
+                    <option value="">Select a category first</option>
                 </select>
             </div>
         </div>
@@ -163,6 +189,51 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
             reader.readAsDataURL(this.files[0]);
         }
     });
+
+    // Pass PHP data to JavaScript
+const instructorsBySpecialization = <?= json_encode($instructors_by_specialization) ?>;
+
+function updateInstructors() {
+    const category = document.getElementById('category').value;
+    const instructorSelect = document.getElementById('instructor_id');
+    
+    // Clear existing options
+    instructorSelect.innerHTML = '';
+    
+    if (!category) {
+        instructorSelect.disabled = true;
+        instructorSelect.innerHTML = '<option value="">Select a category first</option>';
+        return;
+    }
+    
+    // Check if we have instructors for this specialization
+    if (instructorsBySpecialization[category] && instructorsBySpecialization[category].length > 0) {
+        instructorSelect.disabled = false;
+        
+        // Add default option
+        instructorSelect.innerHTML = '<option value="">Select Instructor</option>';
+        
+        // Add instructors
+        instructorsBySpecialization[category].forEach(instructor => {
+            const option = document.createElement('option');
+            option.value = instructor.id;
+            option.textContent = instructor.name;
+            instructorSelect.appendChild(option);
+        });
+    } else {
+        instructorSelect.disabled = true;
+        instructorSelect.innerHTML = `<option value="">No ${category} instructors available</option>`;
+    }
+}
+
+// Initialize instructors dropdown on page load
+document.addEventListener('DOMContentLoaded', function() {
+    // Trigger category change if it has a value
+    const categorySelect = document.getElementById('category');
+    if (categorySelect.value) {
+        updateInstructors();
+    }
+});
 </script>
 
 <?php include 'footer.php'; ?>
