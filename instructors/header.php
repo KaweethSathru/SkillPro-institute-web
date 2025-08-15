@@ -52,8 +52,6 @@ if(!$instructor) {
                     <li><a href="courses.php"><i class="fas fa-book"></i> My Courses</a></li>
                     <li><a href="schedule.php"><i class="fas fa-calendar-alt"></i> Schedule</a></li>
                     <li><a href="students.php"><i class="fas fa-user-graduate"></i> Students</a></li>
-                    <li><a href="attendance.php"><i class="fas fa-check-circle"></i> Attendance</a></li>
-                    <li><a href="grades.php"><i class="fas fa-graduation-cap"></i> Grades</a></li>
                     <li><a href="messages.php"><i class="fas fa-comments"></i> Messages</a></li>
                     <li><a href="profile.php"><i class="fas fa-user"></i> Profile</a></li>
                     <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
