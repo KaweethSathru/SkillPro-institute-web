@@ -95,19 +95,6 @@ session_start();
         </div>
     </section>
     
-    <section class="cta-section">
-        <div class="container">
-            <div class="cta-content">
-                <h2>Ready to Learn from the Best?</h2>
-                <p>Join our vocational courses and gain practical skills from industry experts</p>
-                <div class="cta-buttons">
-                    <a href="courses.php" class="btn">Browse Courses</a>
-                    <a href="contact.php" class="btn secondary">Contact Us</a>
-                </div>
-            </div>
-        </div>
-    </section>
-    
     <?php include 'components/footer.php'; ?>
     
     <script>

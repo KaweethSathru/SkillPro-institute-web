@@ -42,9 +42,6 @@ $enrollments = $stmt->fetchAll();
 
 <div class="admin-content-header">
     <h1>Manage Enrollments</h1>
-    <div class="action-buttons">
-        <a href="#" class="btn"><i class="fas fa-download"></i> Export Data</a>
-    </div>
 </div>
 
 <?php if (isset($success_message)): ?>
@@ -148,14 +145,8 @@ $enrollments = $stmt->fetchAll();
                             </span>
                         </td>
                         <td class="actions">
-                            <a href="#" class="btn-icon view-details" data-id="<?= $enrollment['id'] ?>" title="View Details">
-                                <i class="fas fa-eye"></i>
-                            </a>
                             <a href="#" class="btn-icon edit-status" data-id="<?= $enrollment['id'] ?>" data-status="<?= $enrollment['payment_status'] ?>" title="Update Status">
                                 <i class="fas fa-edit"></i>
-                            </a>
-                            <a href="#" class="btn-icon print-receipt" title="Print Receipt">
-                                <i class="fas fa-print"></i>
                             </a>
                         </td>
                     </tr>
@@ -235,19 +226,6 @@ $enrollments = $stmt->fetchAll();
         }
     });
     
-    // Modal functionality
-    const modals = document.querySelectorAll('.admin-modal');
-    const closeButtons = document.querySelectorAll('.close-modal');
-    
-    // View details modal
-    document.querySelectorAll('.view-details').forEach(button => {
-        button.addEventListener('click', function() {
-            const enrollmentId = this.getAttribute('data-id');
-            fetchEnrollmentDetails(enrollmentId);
-            document.getElementById('enrollment-details-modal').style.display = 'flex';
-        });
-    });
-    
     // Update status modal
     document.querySelectorAll('.edit-status').forEach(button => {
         button.addEventListener('click', function() {
@@ -266,115 +244,6 @@ $enrollments = $stmt->fetchAll();
             modals.forEach(modal => modal.style.display = 'none');
         });
     });
-    
-    // Close modal when clicking outside
-    modals.forEach(modal => {
-        modal.addEventListener('click', function(e) {
-            if (e.target === modal) {
-                modal.style.display = 'none';
-            }
-        });
-    });
-    
-    // Fetch enrollment details via AJAX
-    function fetchEnrollmentDetails(enrollmentId) {
-        // In a real application, this would be an AJAX request to fetch details
-        // For this example, we'll simulate the response
-        
-        const detailsContent = `
-            <div class="enrollment-details">
-                <div>
-                    <div class="detail-section">
-                        <h4>Student Information</h4>
-                        <div class="detail-item">
-                            <div class="detail-label">Full Name:</div>
-                            <div class="detail-value">John Doe</div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-label">Email:</div>
-                            <div class="detail-value">john.doe@example.com</div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-label">Phone:</div>
-                            <div class="detail-value">+94 77 123 4567</div>
-                        </div>
-                    </div>
-                    
-                    <div class="detail-section">
-                        <h4>Course Information</h4>
-                        <div class="detail-item">
-                            <div class="detail-label">Course Name:</div>
-                            <div class="detail-value">Software Engineering</div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-label">Duration:</div>
-                            <div class="detail-value">1 Year</div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-label">Mode:</div>
-                            <div class="detail-value">Online</div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-label">Fees:</div>
-                            <div class="detail-value">LKR 250,000.00</div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-label">Instructor:</div>
-                            <div class="detail-value">Sadun Liyanage</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div>
-                    <div class="detail-section">
-                        <h4>Enrollment Details</h4>
-                        <div class="detail-item">
-                            <div class="detail-label">Enrollment ID:</div>
-                            <div class="detail-value">ENR-00125</div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-label">Enrollment Date:</div>
-                            <div class="detail-value">Aug 15, 2025</div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-label">Branch:</div>
-                            <div class="detail-value">Colombo</div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-label">Payment Method:</div>
-                            <div class="detail-value">Online Payment</div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-label">Payment Status:</div>
-                            <div class="detail-value"><span class="status-badge inactive">Pending</span></div>
-                        </div>
-                    </div>
-                    
-                    <div class="detail-section">
-                        <h4>Payment Information</h4>
-                        <div class="detail-item">
-                            <div class="detail-label">Transaction ID:</div>
-                            <div class="detail-value">TX-987654321</div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-label">Payment Date:</div>
-                            <div class="detail-value">-</div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-label">Amount:</div>
-                            <div class="detail-value">LKR 250,000.00</div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-label">Payment Gateway:</div>
-                            <div class="detail-value">-</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `;
-        
-        document.getElementById('details-content').innerHTML = detailsContent;
-    }
 </script>
 
 <?php include 'footer.php'; ?>

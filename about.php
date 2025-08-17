@@ -59,7 +59,7 @@ $featured_instructors = $instructor_stmt->fetchAll();
                     <p>Today, SkillPro Institute stands as a benchmark for vocational training excellence in Sri Lanka, with a graduate employment rate of 92% and partnerships with over 200 industry organizations.</p>
                 </div>
                 <div class="history-image">
-                    <img src="assets/images/institute-building.jpg" alt="SkillPro Institute Building">
+                    <img src="assets/images/building.jpg" alt="SkillPro Institute Building">
                 </div>
             </div>
             
@@ -128,7 +128,7 @@ $featured_instructors = $instructor_stmt->fetchAll();
             <div class="branches-grid">
                 <div class="branch-card">
                     <div class="branch-image">
-                        <img src="assets/images/colombo-branch.jpg" alt="Colombo Branch">
+                        <img src="assets/images/building.jpg" alt="Colombo Branch">
                     </div>
                     <div class="branch-info">
                         <h3>Colombo Branch</h3>
@@ -149,7 +149,7 @@ $featured_instructors = $instructor_stmt->fetchAll();
                 
                 <div class="branch-card">
                     <div class="branch-image">
-                        <img src="assets/images/kandy-branch.jpg" alt="Kandy Branch">
+                        <img src="assets/images/kandy_branch.jpeg" alt="Kandy Branch">
                     </div>
                     <div class="branch-info">
                         <h3>Kandy Branch</h3>
@@ -170,7 +170,7 @@ $featured_instructors = $instructor_stmt->fetchAll();
                 
                 <div class="branch-card">
                     <div class="branch-image">
-                        <img src="assets/images/matara-branch.jpg" alt="Matara Branch">
+                        <img src="assets/images/mathara_branch.jpg" alt="Matara Branch">
                     </div>
                     <div class="branch-info">
                         <h3>Matara Branch</h3>
@@ -307,7 +307,7 @@ $featured_instructors = $instructor_stmt->fetchAll();
                     </div>
                     <div class="testimonial-author">
                         <div class="author-image">
-                            <img src="assets/images/student1.jpg" alt="Student">
+                            <img src="assets/images/student1.jpeg" alt="Student">
                         </div>
                         <div class="author-info">
                             <h4>Kamal Perera</h4>
@@ -322,7 +322,7 @@ $featured_instructors = $instructor_stmt->fetchAll();
                     </div>
                     <div class="testimonial-author">
                         <div class="author-image">
-                            <img src="assets/images/student2.jpg" alt="Student">
+                            <img src="assets/images/student2.jpeg" alt="Student">
                         </div>
                         <div class="author-info">
                             <h4>Sunil Fernando</h4>

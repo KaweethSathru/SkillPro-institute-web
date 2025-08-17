@@ -167,10 +167,7 @@ $enrollments = $enrollment_stmt->fetchAll();
                     <a href="#" class="btn secondary">
                         <i class="fas fa-edit"></i> Edit Profile
                     </a>
-                    <a href="courses.php" class="btn secondary">
-                        <i class="fas fa-book"></i> My Courses
-                    </a>
-                    <a href="#" class="btn secondary">
+                    <a href="certificates.php" class="btn secondary">
                         <i class="fas fa-certificate"></i> Certificates
                     </a>
                     <a href="contact.php" class="btn secondary">

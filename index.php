@@ -90,7 +90,7 @@ $featured_instructors = $instructor_stmt->fetchAll();
             <div class="course-card">
                 <div class="course-image">
                     <?php if($course['image']): ?>
-                        <img src="admin/assets/images/courses/" alt="<?= $course['name'] ?>">
+                        <img src="admin/assets/images/courses/<?= $course['image'] ?: 'default-course.jpg' ?>" alt="<?= $course['name'] ?>">
                     <?php else: ?>
                         <div class="no-image" style="background:#f8f9fa;height:100%;display:flex;align-items:center;justify-content:center;color:var(--primary);">
                             <i class="fas fa-book fa-3x"></i>

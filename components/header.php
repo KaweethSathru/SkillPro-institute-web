@@ -2,19 +2,6 @@
 $current_page = basename($_SERVER['PHP_SELF']);
 ?>
 <header class="header">
-    <div class="top-bar">
-        <div class="contact-info">
-            <span><i class="fas fa-phone"></i> +94 11 234 5678</span>
-            <span><i class="fas fa-envelope"></i> info@skillpro.lk</span>
-        </div>
-        <div class="social-links">
-            <a href="#"><i class="fab fa-facebook-f"></i></a>
-            <a href="#"><i class="fab fa-twitter"></i></a>
-            <a href="#"><i class="fab fa-linkedin-in"></i></a>
-            <a href="#"><i class="fab fa-instagram"></i></a>
-        </div>
-    </div>
-    
     <nav class="navbar">
         <a href="index.php" class="logo">
             <img src="../assets/images/logo.png" alt="SkillPro Institute">

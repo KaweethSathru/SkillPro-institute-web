@@ -47,10 +47,6 @@ $students = $stmt->fetchAll();
 
 <div class="admin-content-header">
     <h1>Manage Students</h1>
-    <div class="action-buttons">
-        <a href="#" class="btn"><i class="fas fa-plus"></i> Add New Student</a>
-        <a href="#" class="btn secondary" id="export-students"><i class="fas fa-download"></i> Export Data</a>
-    </div>
 </div>
 
 <?php if (isset($success_message)): ?>
@@ -135,8 +131,6 @@ $students = $stmt->fetchAll();
                         </td>
                         <td>Today</td>
                         <td class="actions">
-                            <a href="#" class="btn-icon view-details" title="View Details"><i class="fas fa-eye"></i></a>
-                            <a href="#" class="btn-icon" title="Edit"><i class="fas fa-edit"></i></a>
                             <a href="students.php?delete=<?= $student['id'] ?>" class="btn-icon delete-btn" title="Delete" onclick="return confirm('Are you sure you want to delete this student? This will also remove all their enrollments.')">
                                 <i class="fas fa-trash-alt"></i>
                             </a>
@@ -168,139 +162,7 @@ $students = $stmt->fetchAll();
     </div>
 </div>
 
-<!-- Student Details Modal -->
-<div class="admin-modal" id="student-details-modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3>Student Details</h3>
-            <button class="close-modal">&times;</button>
-        </div>
-        <div class="modal-body">
-            <div class="student-details">
-                <div class="detail-row">
-                    <div class="detail-header">
-                        <div class="student-avatar-lg">
-                            <img src="assets/images/student-avatar.jpg" alt="Student Avatar">
-                        </div>
-                        <div>
-                            <h2>John Doe</h2>
-                            <div class="student-id">ID: STU-00125</div>
-                            <div class="student-status"><span class="status-badge active">Active</span></div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="detail-row">
-                    <div class="detail-section">
-                        <h4><i class="fas fa-user"></i> Personal Information</h4>
-                        <div class="detail-grid">
-                            <div class="detail-item">
-                                <div class="detail-label">Full Name</div>
-                                <div class="detail-value">John Doe</div>
-                            </div>
-                            <div class="detail-item">
-                                <div class="detail-label">Username</div>
-                                <div class="detail-value">johndoe123</div>
-                            </div>
-                            <div class="detail-item">
-                                <div class="detail-label">Email</div>
-                                <div class="detail-value">john.doe@example.com</div>
-                            </div>
-                            <div class="detail-item">
-                                <div class="detail-label">Phone</div>
-                                <div class="detail-value">+94 77 123 4567</div>
-                            </div>
-                            <div class="detail-item">
-                                <div class="detail-label">Registration Date</div>
-                                <div class="detail-value">Aug 15, 2025</div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="detail-section">
-                        <h4><i class="fas fa-book"></i> Enrollments</h4>
-                        <div class="enrollments-list">
-                            <div class="enrollment-item">
-                                <div class="course-name">Software Engineering</div>
-                                <div class="enrollment-meta">
-                                    <span>Colombo Branch</span>
-                                    <span>Online</span>
-                                    <span>Enrolled: Aug 15, 2025</span>
-                                </div>
-                                <div class="payment-status"><span class="status-badge inactive">Pending Payment</span></div>
-                            </div>
-                            
-                            <div class="enrollment-item">
-                                <div class="course-name">Web Development Fundamentals</div>
-                                <div class="enrollment-meta">
-                                    <span>Colombo Branch</span>
-                                    <span>On-site</span>
-                                    <span>Enrolled: Jul 28, 2025</span>
-                                </div>
-                                <div class="payment-status"><span class="status-badge active">Completed</span></div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="detail-section">
-                        <h4><i class="fas fa-chart-bar"></i> Activity Summary</h4>
-                        <div class="activity-grid">
-                            <div class="activity-stat">
-                                <div class="stat-number">5</div>
-                                <div class="stat-label">Courses Enrolled</div>
-                            </div>
-                            <div class="activity-stat">
-                                <div class="stat-number">3</div>
-                                <div class="stat-label">Certificates</div>
-                            </div>
-                            <div class="activity-stat">
-                                <div class="stat-number">12</div>
-                                <div class="stat-label">Completed Modules</div>
-                            </div>
-                            <div class="activity-stat">
-                                <div class="stat-number">85%</div>
-                                <div class="stat-label">Avg. Progress</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="modal-footer">
-            <button class="btn secondary close-modal">Close</button>
-            <button class="btn">Edit Profile</button>
-        </div>
-    </div>
-</div>
-
 <script>
-    // Modal functionality
-    const modals = document.querySelectorAll('.admin-modal');
-    const closeButtons = document.querySelectorAll('.close-modal');
-    
-    // View details modal
-    document.querySelectorAll('.view-details').forEach(button => {
-        button.addEventListener('click', function() {
-            document.getElementById('student-details-modal').style.display = 'flex';
-        });
-    });
-    
-    // Close modals
-    closeButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            modals.forEach(modal => modal.style.display = 'none');
-        });
-    });
-    
-    // Close modal when clicking outside
-    modals.forEach(modal => {
-        modal.addEventListener('click', function(e) {
-            if (e.target === modal) {
-                modal.style.display = 'none';
-            }
-        });
-    });
-    
     // Filter functionality
     document.getElementById('status-filter').addEventListener('change', function() {
         const status = this.value;
@@ -320,12 +182,6 @@ $students = $stmt->fetchAll();
                     (status === 'inactive' && !isActive) ? '' : 'none';
             }
         }
-    });
-    
-    // Export functionality
-    document.getElementById('export-students').addEventListener('click', function(e) {
-        e.preventDefault();
-        alert('Export functionality would be implemented here. Data would be exported in CSV format.');
     });
 </script>
 

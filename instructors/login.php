@@ -49,7 +49,7 @@ if(isset($_POST['submit'])) {
         <div class="login-form-container">
             <div class="login-form">
                 <div class="login-logo">
-                    <img src="../images/logo.png" alt="SkillPro Institute">
+                    <img src="assets/images/logo.png" alt="SkillPro Institute">
                     <h1>Instructor Portal</h1>
                 </div>
                 

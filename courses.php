@@ -1,4 +1,3 @@
-<!-- courses.php -->
 <?php
 include 'components/connection.php';
 session_start();
@@ -84,23 +83,6 @@ session_start();
                     <p>Check back later for our upcoming courses.</p>
                 </div>
                 <?php endif; ?>
-            </div>
-        </div>
-    </section>
-    
-    <section class="cta-section">
-        <div class="container">
-            <div class="cta-content">
-                <h2>Ready to Start Your Career Journey?</h2>
-                <p>Join thousands of successful graduates who transformed their lives with SkillPro Institute</p>
-                <div class="cta-buttons">
-                    <?php if(isset($_SESSION['user_id'])): ?>
-                        <a href="courses.php" class="btn">Browse Courses</a>
-                    <?php else: ?>
-                        <a href="register.php" class="btn">Create Account</a>
-                        <a href="login.php" class="btn secondary">Login to Enroll</a>
-                    <?php endif; ?>
-                </div>
             </div>
         </div>
     </section>
