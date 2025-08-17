@@ -14,6 +14,51 @@ if (!$student) {
     exit();
 }
 
+// Process profile image upload
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['profile_image'])) {
+    if ($_FILES['profile_image']['error'] == 0) {
+        $target_dir = "assets/images/profiles/";
+        
+        // Create directory if it doesn't exist
+        if (!file_exists($target_dir)) {
+            mkdir($target_dir, 0777, true);
+        }
+        
+        $file_extension = pathinfo($_FILES["profile_image"]["name"], PATHINFO_EXTENSION);
+        $filename = "profile_" . $student_id . "_" . time() . "." . $file_extension;
+        $target_file = $target_dir . $filename;
+        
+        // Check if image file is actual image
+        $check = getimagesize($_FILES["profile_image"]["tmp_name"]);
+        if ($check !== false) {
+            // Move file to target directory
+            if (move_uploaded_file($_FILES["profile_image"]["tmp_name"], $target_file)) {
+                // Delete old image if exists
+                if ($student['profile_image'] && file_exists($student['profile_image'])) {
+                    unlink($student['profile_image']);
+                }
+                
+                // Update database
+                $update_sql = "UPDATE students SET profile_image = :image WHERE id = :id";
+                $update_stmt = $conn->prepare($update_sql);
+                $update_stmt->execute(['image' => $target_file, 'id' => $student_id]);
+                
+                // Refresh student data
+                $stmt->execute(['id' => $student_id]);
+                $student = $stmt->fetch(PDO::FETCH_ASSOC);
+                
+                $success = "Profile image updated successfully!";
+            } else {
+                $error = "Sorry, there was an error uploading your file.";
+            }
+        } else {
+            $error = "File is not an image.";
+        }
+    } else {
+        $error = "Error uploading file: " . $_FILES['profile_image']['error'];
+    }
+}
+
 // Get enrolled courses
 $enrollment_sql = "SELECT courses.name, courses.category, enrollments.enrolled_at 
                    FROM enrollments 
@@ -22,6 +67,18 @@ $enrollment_sql = "SELECT courses.name, courses.category, enrollments.enrolled_a
 $enrollment_stmt = $conn->prepare($enrollment_sql);
 $enrollment_stmt->execute(['student_id' => $student_id]);
 $enrollments = $enrollment_stmt->fetchAll();
+
+// Get certificates for this student
+$sql = "SELECT c.*, cr.name AS course_name, i.full_name AS instructor_name
+        FROM certificates c
+        JOIN courses cr ON c.course_id = cr.id
+        JOIN instructors i ON c.instructor_id = i.id
+        WHERE c.student_id = ?
+        ORDER BY c.issue_date DESC";
+        
+$stmt = $conn->prepare($sql);
+$stmt->execute([$student_id]);
+$certificates = $stmt->fetchAll();
 ?>
 
 <!DOCTYPE html>
@@ -40,12 +97,47 @@ $enrollments = $enrollment_stmt->fetchAll();
     <div class="profile-container">
         <!-- Profile Sidebar -->
         <div class="profile-sidebar">
-            <div class="profile-pic">
-                <img src="assets/images/student-avatar.jpg" alt="Student Avatar">
-                <div class="edit-icon">
-                    <i class="fas fa-camera"></i>
+            <form method="POST" enctype="multipart/form-data" class="profile-image-form">
+                <div class="image-preview-container">
+                    <div class="profile-pic">
+                        <?php if ($student['profile_image']): ?>
+                            <img src="<?= $student['profile_image'] ?>" alt="Student Profile Photo" id="profile-preview">
+                        <?php else: ?>
+                            <img src="assets/images/profile.png" alt="Student Avatar" id="profile-preview">
+                        <?php endif; ?>
+                    </div>
+                    <div class="edit-icon">
+                        <i class="fas fa-camera"></i>
+                    </div>
                 </div>
-            </div>
+                
+                <div class="upload-btn-wrapper">
+                    <div class="upload-btn">
+                        <i class="fas fa-upload"></i> Change Photo
+                    </div>
+                    <input type="file" name="profile_image" id="profile_image" accept="image/*" required>
+                </div>
+                
+                <div class="image-upload-instructions">
+                    Max 2MB • JPG, PNG
+                </div>
+                
+                <button type="submit" class="btn" style="width: 100%; margin-top: 15px;">
+                    <i class="fas fa-save"></i> Save Photo
+                </button>
+            </form>
+            
+            <?php if(isset($success)): ?>
+                <div class="success-message" style="margin-top: 15px; padding: 10px; background: #d4edda; color: #155724; border-radius: 5px; text-align: center;">
+                    <i class="fas fa-check-circle"></i> <?= $success ?>
+                </div>
+            <?php endif; ?>
+            
+            <?php if(isset($error)): ?>
+                <div class="error-message" style="margin-top: 15px; padding: 10px; background: #f8d7da; color: #721c24; border-radius: 5px; text-align: center;">
+                    <i class="fas fa-exclamation-circle"></i> <?= $error ?>
+                </div>
+            <?php endif; ?>
             
             <div class="profile-header">
                 <h1><?= $student['full_name'] ?></h1>
@@ -70,7 +162,7 @@ $enrollments = $enrollment_stmt->fetchAll();
                     <div class="label">Courses</div>
                 </div>
                 <div class="stat-card">
-                    <div class="number">12</div>
+                    <div class="number"><?= count($certificates) ?></div>
                     <div class="label">Certificates</div>
                 </div>
             </div>
@@ -164,9 +256,6 @@ $enrollments = $enrollment_stmt->fetchAll();
                 <h3>Account Actions</h3>
                 
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 20px;">
-                    <a href="#" class="btn secondary">
-                        <i class="fas fa-edit"></i> Edit Profile
-                    </a>
                     <a href="certificates.php" class="btn secondary">
                         <i class="fas fa-certificate"></i> Certificates
                     </a>
@@ -177,6 +266,23 @@ $enrollments = $enrollment_stmt->fetchAll();
             </div>
         </div>
     </div>
+    
+    <script>
+        // Profile image preview
+        document.getElementById('profile_image').addEventListener('change', function(e) {
+            const preview = document.getElementById('profile-preview');
+            
+            if(this.files && this.files[0]) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                }
+                
+                reader.readAsDataURL(this.files[0]);
+            }
+        });
+    </script>
     
     <?php include 'components/footer.php'; ?>
 </body>

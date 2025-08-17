@@ -107,7 +107,6 @@ if (isset($_POST['submit'])) {
                     
                     <div class="auth-links">
                         <p>Already have an account? <a href="../login.php">Login here</a></p>
-                        <p>Are you an instructor? <a href="contact.php">Contact administration</a></p>
                     </div>
                 </form>
             </div>

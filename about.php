@@ -1,5 +1,6 @@
 <?php
 include 'components/connection.php';
+session_start();
 
 // Fetch featured instructors
 $instructor_sql = "SELECT * FROM instructors WHERE status = 'Active' ORDER BY RAND() LIMIT 4";

@@ -109,8 +109,12 @@ $students = $stmt->fetchAll();
                         <td>
                             <div class="student-info">
                                 <div class="student-avatar">
-                                    <img src="assets/images/student-avatar.jpg" alt="Student Avatar">
-                                </div>
+                                <?php if ($student['profile_image']): ?>
+                                    <img src="../<?= $student['profile_image'] ?>" alt="Student Profile Photo">
+                                <?php else: ?>
+                                    <img src="assets/images/profile.png" alt="Student Avatar">
+                                <?php endif; ?>
+                            </div>
                                 <div>
                                     <strong><?= $student['full_name'] ?></strong>
                                     <div class="student-id">ID: STU-<?= str_pad($student['id'], 5, '0', STR_PAD_LEFT) ?></div>

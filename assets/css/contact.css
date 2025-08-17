@@ -1,4 +1,11 @@
-        .contact-container {
+.contact-hero {
+            background: linear-gradient(rgba(12, 75, 101, 0.85), rgba(12, 75, 101, 0.85)), url('assets/images/about-bg.jpg') center/cover;
+            color: white;
+            padding: 100px 0;
+            text-align: center;
+        }
+
+.contact-container {
             max-width: 1200px;
             margin: 40px auto;
             padding: 20px;
@@ -10,13 +17,13 @@
         }
         
         .contact-header h1 {
-            color: #2c3e50;
+            color: white;
             font-size: 2.5rem;
             margin-bottom: 10px;
         }
         
         .contact-header p {
-            color: #7f8c8d;
+            color: white;
             font-size: 1.1rem;
             max-width: 700px;
             margin: 0 auto;

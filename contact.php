@@ -7,7 +7,8 @@ $student_logged_in = false;
 $student_name = "";
 $student_email = "";
 
-if(isset($_SESSION['user_id']) && $_SESSION['user_role'] == 'student') {
+// FIX: Changed 'user_role' to 'role'
+if(isset($_SESSION['user_id']) && isset($_SESSION['role']) && $_SESSION['role'] == 'student') {
     $student_logged_in = true;
     
     // Get student details
@@ -70,12 +71,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <body class="student-panel">
     <?php include 'components/header.php'; ?>
     
-    <div class="contact-container">
+    <section class="contact-hero">
         <div class="contact-header">
             <h1>Contact SkillPro Institute</h1>
             <p>Have questions or need assistance? Reach out to us using the form below or through our contact information. We're here to help you with your vocational training journey.</p>
         </div>
-        
+    </section>
+
+    <div class="contact-container">
         <div class="contact-content">
             <div class="contact-form-section">
                 <?php if(!empty($error_message)): ?>

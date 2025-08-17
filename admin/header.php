@@ -36,6 +36,7 @@ if(!isset($_SESSION['admin_id'])) {
                     <li><a href="courses.php"><i class="fas fa-book"></i> Courses</a></li>
                     <li><a href="enrollments.php"><i class="fas fa-clipboard-list"></i> Enrollments</a></li>
                     <li><a href="certificates.php"><i class="fas fa-certificate"></i> Certificates</a></li>
+                    <li><a href="messages.php"><i class="fas fa-comments"></i> Messages</a></li>
                     <li><a href="events.php"><i class="fas fa-calendar-alt"></i> Events</a></li>
                     <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
                 </ul>
