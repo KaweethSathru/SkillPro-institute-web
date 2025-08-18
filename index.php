@@ -152,7 +152,7 @@ $featured_instructors = $instructor_stmt->fetchAll();
                         <div><i class="fas fa-building"></i> <?= $event['branch'] ?></div>
                     </div>
                     <p><?= substr($event['description'], 0, 80) ?>...</p>
-                    <a href="event-details.php?id=<?= $event['id'] ?>" class="btn-text">View Details <i class="fas fa-arrow-right"></i></a>
+                    <a href="events.php" class="btn-text">View Details <i class="fas fa-arrow-right"></i></a>
                 </div>
             </div>
             <?php endforeach; ?>
@@ -207,7 +207,7 @@ $featured_instructors = $instructor_stmt->fetchAll();
             <h2>Ready to Transform Your Career?</h2>
             <p>Join thousands of students who have gained practical skills and advanced their careers with SkillPro Institute</p>
             <div class="cta-buttons">
-                <a href="register.php" class="btn">Create Account</a>
+                <a href="components/register.php" class="btn">Create Account</a>
                 <a href="contact.php" class="btn secondary">Contact Us</a>
             </div>
         </div>

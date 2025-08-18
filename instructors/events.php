@@ -1,6 +1,6 @@
 <!-- events.php in root directory -->
 <?php
-include 'components/connection.php';
+include '../components/connection.php';
 session_start();
 ?>
 
@@ -15,7 +15,7 @@ session_start();
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
 <body>
-    <?php include 'components/header.php'; ?>
+    <?php include '../components/header.php'; ?>
     
     <section class="page-header">
         <div class="container">

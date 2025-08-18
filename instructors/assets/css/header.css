@@ -5,11 +5,6 @@
         --sidebar-hover: rgba(255, 255, 255, 0.1);
     }
     
-    .instructor-dashboard {
-        display: flex;
-        min-height: 100vh;
-    }
-    
     .instructor-sidebar {
         width: var(--sidebar-width);
         background: var(--sidebar-bg);

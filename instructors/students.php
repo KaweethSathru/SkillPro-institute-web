@@ -10,6 +10,7 @@ $sql = "SELECT
             students.full_name, 
             students.email, 
             students.phone,
+            students.profile_image,
             courses.name AS course_name,
             enrollments.enrolled_at,
             enrollments.branch
@@ -44,7 +45,11 @@ $students = $stmt->fetchAll();
             ?>
             <div class="student-card">
                 <div class="student-avatar">
-                    <img src="assets/images/student-avatar.jpg" alt="Student Avatar">
+                    <?php if ($student['profile_image']): ?>
+                        <img src="../<?= $student['profile_image'] ?>" alt="Student Profile Photo">
+                    <?php else: ?>
+                        <img src="assets/images/profile.png" alt="Student Avatar">
+                    <?php endif; ?>
                 </div>
                 <div class="student-info">
                     <h3><?= $student['full_name'] ?></h3>

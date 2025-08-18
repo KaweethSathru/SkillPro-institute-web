@@ -1,4 +1,3 @@
-<!-- instructor/footer.php -->
             </div> <!-- End .instructor-content -->
         </div> <!-- End .instructor-main -->
     </div> <!-- End .instructor-dashboard -->
