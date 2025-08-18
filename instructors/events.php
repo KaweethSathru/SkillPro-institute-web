@@ -1,9 +1,3 @@
-<!-- events.php in root directory -->
-<?php
-include '../components/connection.php';
-session_start();
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,14 +9,9 @@ session_start();
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
 <body>
-    <?php include '../components/header.php'; ?>
+    <?php include 'header.php'; ?>
     
-    <section class="page-header">
-        <div class="container">
-            <h1>Upcoming Events</h1>
-            <p>Stay updated with our latest workshops, seminars, and activities</p>
-        </div>
-    </section>
+<h1 class="page-title">Events</h1>
     
     <section class="events-section">
         <div class="container">
@@ -33,9 +22,6 @@ session_start();
                     <button class="filter-btn" data-filter="seminar">Seminars</button>
                     <button class="filter-btn" data-filter="job-fair">Job Fairs</button>
                     <button class="filter-btn" data-filter="batch-start">Batch Starts</button>
-                </div>
-                <div class="events-calendar">
-                    <a href="#" class="btn"><i class="fas fa-calendar-alt"></i> View Calendar</a>
                 </div>
             </div>
             
@@ -60,7 +46,7 @@ session_start();
                     </div>
                     <div class="event-image">
                         <?php if($event['poster']): ?>
-                            <img src="admin/assets/images/events/<?= $event['poster'] ?>" alt="<?= $event['title'] ?>">
+                            <img src="../admin/assets/images/events/<?= $event['poster'] ?>" alt="<?= $event['title'] ?>">
                         <?php else: ?>
                             <div class="no-poster">
                                 <i class="fas fa-calendar-alt"></i>
@@ -107,7 +93,7 @@ session_start();
                 <div class="past-event-card">
                     <div class="event-image">
                         <?php if($event['poster']): ?>
-                            <img src="admin/assets/images/events/<?= $event['poster'] ?>" alt="<?= $event['title'] ?>">
+                            <img src="../admin/assets/images/events/<?= $event['poster'] ?>" alt="<?= $event['title'] ?>">
                         <?php else: ?>
                             <div class="no-poster">
                                 <i class="fas fa-calendar-alt"></i>
@@ -126,14 +112,9 @@ session_start();
                 <?php endif; ?>
             </div>
             <?php if(count($past_events) > 0): ?>
-            <div class="center-btn">
-                <a href="past-events.php" class="btn secondary">View All Past Events</a>
-            </div>
             <?php endif; ?>
         </div>
     </section>
-    
-    <?php include 'components/footer.php'; ?>
     
     <script>
         // Event filtering

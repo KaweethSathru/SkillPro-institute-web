@@ -29,6 +29,23 @@ if (count($courses) > 0) {
     $student_count = $students_stmt->fetchColumn();
 }
 
+// Get students for the instructor
+$students_sql = "SELECT 
+            students.id, 
+            students.full_name, 
+            students.email, 
+            courses.name AS course_name
+        FROM enrollments
+        JOIN students ON enrollments.student_id = students.id
+        JOIN courses ON enrollments.course_id = courses.id
+        WHERE courses.instructor_id = :instructor_id
+        GROUP BY students.id
+        ORDER BY students.full_name ASC
+        LIMIT 5";
+$students_stmt = $conn->prepare($students_sql);
+$students_stmt->execute(['instructor_id' => $instructor_id]);
+$my_students = $students_stmt->fetchAll();
+
 // Get upcoming events for these courses
 $events_sql = "SELECT * FROM events 
                WHERE branch IN (SELECT branch FROM courses WHERE instructor_id = :instructor_id)
@@ -38,21 +55,6 @@ $events_sql = "SELECT * FROM events
 $events_stmt = $conn->prepare($events_sql);
 $events_stmt->execute(['instructor_id' => $instructor_id]);
 $upcoming_events = $events_stmt->fetchAll();
-
-// Get recent enrollments
-$enrollments_sql = "SELECT 
-            students.full_name, 
-            courses.name AS course_name, 
-            enrollments.enrolled_at
-        FROM enrollments
-        JOIN students ON enrollments.student_id = students.id
-        JOIN courses ON enrollments.course_id = courses.id
-        WHERE courses.instructor_id = :instructor_id
-        ORDER BY enrollments.enrolled_at DESC
-        LIMIT 5";
-$enrollments_stmt = $conn->prepare($enrollments_sql);
-$enrollments_stmt->execute(['instructor_id' => $instructor_id]);
-$recent_enrollments = $enrollments_stmt->fetchAll();
 ?>
 
 <div class="instructor-dashboard">
@@ -135,26 +137,24 @@ $recent_enrollments = $enrollments_stmt->fetchAll();
         
         <div class="dashboard-section">
             <div class="section-header">
-                <h2>Recent Enrollments</h2>
+                <h2>My Students</h2>
                 <a href="students.php" class="btn small">View All</a>
             </div>
             <div class="section-content">
-                <?php if (count($recent_enrollments) > 0): ?>
+                <?php if (count($my_students) > 0): ?>
                     <ul class="recent-list">
-                        <?php foreach ($recent_enrollments as $enrollment): 
-                            $enrolled_date = date('M d', strtotime($enrollment['enrolled_at']));
-                        ?>
+                        <?php foreach ($my_students as $student): ?>
                         <li class="recent-item">
                             <div class="recent-icon">
-                                <i class="fas fa-user-plus"></i>
+                                <i class="fas fa-user-graduate"></i>
                             </div>
                             <div class="recent-info">
-                                <h4><?= $enrollment['full_name'] ?></h4>
+                                <h4><?= $student['full_name'] ?></h4>
                                 <div class="recent-meta">
-                                    <?= $enrollment['course_name'] ?>
+                                    <?= $student['email'] ?>
                                 </div>
                                 <div class="recent-meta">
-                                    <small>Enrolled: <?= $enrolled_date ?></small>
+                                    <small><?= $student['course_name'] ?></small>
                                 </div>
                             </div>
                         </li>
@@ -163,8 +163,8 @@ $recent_enrollments = $enrollments_stmt->fetchAll();
                 <?php else: ?>
                     <div class="no-data">
                         <i class="fas fa-user-graduate"></i>
-                        <h3>No Recent Enrollments</h3>
-                        <p>No students have enrolled in your courses recently</p>
+                        <h3>No Students Yet</h3>
+                        <p>No students are enrolled in your courses</p>
                     </div>
                 <?php endif; ?>
             </div>
