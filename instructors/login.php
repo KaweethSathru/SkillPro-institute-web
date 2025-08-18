@@ -68,10 +68,6 @@ if(isset($_POST['submit'])) {
                         <input type="password" id="password" name="password" class="form-control" required>
                     </div>
                     
-                    <div class="forgot-password">
-                        <a href="forgot_password.php">Forgot your password?</a>
-                    </div>
-                    
                     <div class="form-group">
                         <button type="submit" name="submit" class="btn btn-block">Login</button>
                     </div>
