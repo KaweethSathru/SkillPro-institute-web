@@ -256,6 +256,9 @@ $certificates = $stmt->fetchAll();
                 <h3>Account Actions</h3>
                 
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 20px;">
+                    <a href="schedule.php" class="btn secondary">
+                        <i class="fas fa-calendar-alt"></i> Schedule
+                    </a>
                     <a href="certificates.php" class="btn secondary">
                         <i class="fas fa-certificate"></i> Certificates
                     </a>

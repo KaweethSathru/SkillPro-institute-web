@@ -50,6 +50,7 @@ if(!$instructor) {
                 <ul>
                     <li><a href="dashboard.php" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
                     <li><a href="courses.php"><i class="fas fa-book"></i> My Courses</a></li>
+                    <li><a href="schedule.php"><i class="fas fa-calendar-alt"></i> Schedule</a></li>
                     <li><a href="students.php"><i class="fas fa-user-graduate"></i> Students</a></li>
                     <li><a href="events.php"><i class="fas fa-calendar-alt"></i> Events</a></li>
                     <li><a href="profile.php"><i class="fas fa-user"></i> Profile</a></li>

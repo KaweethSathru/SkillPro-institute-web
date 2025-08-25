@@ -194,9 +194,6 @@ $certificates = $stmt->fetchAll();
                         <a href="admin/view_certificate.php?id=<?= $certificate['id'] ?>" target="_blank" class="btn-icon btn-view">
                             <i class="fas fa-eye"></i> View
                         </a>
-                        <a href="download_certificate.php?id=<?= $certificate['id'] ?>" class="btn-icon btn-download">
-                            <i class="fas fa-download"></i> Download
-                        </a>
                     </div>
                 </div>
                 <?php endforeach; ?>

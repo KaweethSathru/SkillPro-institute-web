@@ -34,6 +34,7 @@ if(!isset($_SESSION['admin_id'])) {
                     <li><a href="students.php"><i class="fas fa-user-graduate"></i> Students</a></li>
                     <li><a href="instructors.php"><i class="fas fa-chalkboard-teacher"></i> Instructors</a></li>
                     <li><a href="courses.php"><i class="fas fa-book"></i> Courses</a></li>
+                    <li><a href="schedule.php"><i class="fas fa-calendar-alt"></i> Schedule</a></li>
                     <li><a href="enrollments.php"><i class="fas fa-clipboard-list"></i> Enrollments</a></li>
                     <li><a href="certificates.php"><i class="fas fa-certificate"></i> Certificates</a></li>
                     <li><a href="messages.php"><i class="fas fa-comments"></i> Messages</a></li>
