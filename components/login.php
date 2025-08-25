@@ -1,4 +1,3 @@
-<!-- components/login.php -->
 <?php
 include 'connection.php';
 

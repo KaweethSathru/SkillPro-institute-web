@@ -1,4 +1,3 @@
-<!-- instructor/login.php -->
 <?php
 session_start();
 include '../components/connection.php';
